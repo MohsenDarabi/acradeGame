@@ -247,12 +247,25 @@ var Engine = (function(global) {
         player.render();
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
+    //Reset the game to its original state and change currentGameState to gameOver
     function reset() {
-        // noop
+        currentGameState = "gameOver";
+        player.characterReset();
+        heart.heartReset();
+        clearTimeout(heart.heartWaitTime);
+        gem.gemReset();
+        clearTimeout(gem.gemWaitTime);
+        speedMultiplier = 40;
+        player.playerScore = 0;
+        player.playerLives = 3;
+        allEnemies = [];
+        //Instantiate all enemies, set to 3
+        for (var i = 0; i < 3; i++) {
+            //startSpeed is a random number from 1-10 times speedMultiplier
+            var startSpeed = speedMultiplier * Math.floor(Math.random() * 10 + 1);
+            //enemys start off canvas (x = -100) at the following Y positions: 60, 145, 230
+            allEnemies.push(new Enemy(-100, 60 + (85 * i), startSpeed));
+        }
     }
 
     /* Go ahead and load all of the images we know we're going to need to
