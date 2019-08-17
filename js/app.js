@@ -32,6 +32,7 @@ Enemy.prototype.update = function(dt) {
     this.checkCollision();
 };
 
+var speedMultiplier = 40;
 // Random speed generator
 Enemy.prototype.randomSpeed = function (){
     "use strict";
