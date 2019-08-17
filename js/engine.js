@@ -29,6 +29,8 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
+    var currentGameState = "startGame";
+
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
@@ -64,7 +66,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
+        //reset();
         lastTime = Date.now();
         main();
     }
@@ -90,11 +92,48 @@ var Engine = (function(global) {
      * the data/properties related to the object. Do your drawing in your
      * render methods.
      */
-    function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        player.update();
+    function update(dt) {
+        
+        // for Finite State Machine
+        // Change game behavior according to game state
+        switch (currentGameState) {
+            case "startGame":
+                // Turn the keypress event listener in app.js off
+                document.removeEventListener("keyup", input);
+                // Listen for enter key, switch game state to inGame when pressed
+                
+                var startInput = function(e) {
+                    // Use e.which or e.keyCode for browser compatibility
+                    var key = e.which || e.keyCode;
+                    // Enter key changes game state to "inGame"
+                    if (key === 13) {
+                        currentGameState = "inGame";
+                    }
+                };
+                document.addEventListener("keydown", startInput);
+                break;
+            // Here we do the "normal" things we'd do when the game is running, mainly updateEntities
+            case "inGame":
+                // Turn the keypress event listener in app.js back on
+                document.addEventListener('keyup', input);
+                // Call updateEntities to update each entity in the game
+                updateEntities(dt);
+                // Fix player head staying rendered behind top tiles
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                break;
+            case "gameOver":
+                // Turn the keypress event listener in app.js off
+                document.removeEventListener('keyup', input);
+                // Listen for enter key, switch game state to inGame when pressed
+                var gameoverInput = function(e) {
+                    var key = e.which || e.keyCode;
+                    if (key === 13) {
+                        currentGameState = "inGame";
+                    }
+                };
+                document.addEventListener("keydown", gameoverInput);
+                break;
+        }
     }
 
     /* This function initially draws the "game level", it will then call
