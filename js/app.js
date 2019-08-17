@@ -40,8 +40,15 @@ Enemy.prototype.randomSpeed = function (){
 };
 
 // Draw the enemy on the screen, required method for game
+// Draw the scoreboard on the screen
 Enemy.prototype.render = function() {
+    "use strict";
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.fillStyle = "white";
+    ctx.font = "16px Comic Sans MS";
+    ctx.fillText("Score: " + player.playerScore, 40, 70);
+    ctx.fillText("Lives: " + player.playerLives, 141, 70);
+    ctx.fillText("Difficulty: " + speedMultiplier, 260, 70);
 };
 
 // Now write your own player class
