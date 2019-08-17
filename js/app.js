@@ -194,6 +194,23 @@ Heart.prototype.collisionDetected = function() {
     player.playerLives += 1;
     this.wait();
 };
+// Call setTimeout in a function so we can assign it to a variable
+// Necessary for clearTimeout(heart.heartWaitTime) to work
+Heart.prototype.wait = function() {
+    this.heartWaitTime = setTimeout( function() {
+        heart.heartReset(); // this.heartReset() doesn't work
+    }, 30000);
+};
+
+// Reset the heart to a new location
+Heart.prototype.heartReset = function() {
+    "use strict";
+    //Hearts appear at one of the following x positions: 0, 101, 202, 303, 404
+    this.x = (101 * Math.floor(Math.random() * 4) + 0);
+    //Hearts appear at one of the following Y positions: 70, 155, 240
+    this.y = (70 + (85 * Math.floor(Math.random() * 3) + 0));
+};
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
