@@ -148,6 +148,52 @@ Gem.prototype.gemReset = function() {
     this.y = (60 + (85 * Math.floor(Math.random() * 3) + 0));
 };
 
+/ Hearts the player should try to pick up
+var Heart = function(x,y) {
+    "use strict";
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Heart.png';
+    this.heartWaitTime = undefined;
+};
+
+// Update heart, call checkCollision
+Heart.prototype.update = function() {
+    "use strict";
+    this.checkCollision();
+};
+
+// Draw the heart to the screen
+Heart.prototype.render = function() {
+    "use strict";
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Check for collision
+Heart.prototype.checkCollision = function() {
+    "use strict";
+    // Set hitboxes for collision detection
+    var playerBox = {x: player.x, y: player.y, width: 50, height: 40};
+    var heartBox = {x: this.x, y: this.y, width: 60, height: 70};
+    // Check for collisions, if playerBox intersects heartBox, we have one
+    if (playerBox.x < heartBox.x + heartBox.width &&
+        playerBox.x + playerBox.width > heartBox.x &&
+        playerBox.y < heartBox.y + heartBox.height &&
+        playerBox.height + playerBox.y > heartBox.y) {
+        // Collision detected, call collisionDetected function
+        this.collisionDetected();
+    }
+};
+
+// Heart collision detected, hide the heart off canvas,
+// Increment player lives, wait 30 seconds, then reset the heart
+Heart.prototype.collisionDetected = function() {
+    "use strict";
+    this.x = 900;
+    this.y = 900;
+    player.playerLives += 1;
+    this.wait();
+};
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
