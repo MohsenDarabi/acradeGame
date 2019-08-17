@@ -293,6 +293,39 @@ Player.prototype.handleInput = function(allowedKeys) {
     }
 };
 
+/*----------------------------------------------------------------------------*/
+/*-------------------------Instantiate Objects--------------------------------*/
+
+// Now instantiate your objects.
+// Place all enemy objects in an array called allEnemies
+// Place the player object in a variable called player
+
+// Instantiate player
+var player = new Player();
+
+// Empty allEnemies array
+var allEnemies = [];
+
+// Instantiate all enemies, set to 3, push to allEnemies array
+for (var i = 0; i < 3; i++) {
+    //startSpeed is a random number from 1-10 times speedMultiplier
+    var startSpeed = speedMultiplier * Math.floor(Math.random() * 10 + 1);
+    //enemys start off canvas (x = -100) at the following Y positions: 60, 145, 230
+    allEnemies.push(new Enemy(-100, 60 + (85 * i), startSpeed));
+}
+
+// Instantiate Gem
+// Gems appear at one of the following x positions: 0, 101, 202, 303, 404
+// And at one of the following Y positions: 60, 145, 230
+var gem = new Gem (101 * Math.floor(Math.random() * 4) + 0, 60 +
+    (85 * Math.floor(Math.random() * 3) + 0));
+
+// Instantiate heart
+// Hearts appear at one of the following x positions: 0, 101, 202, 303, 404
+// And at one of the following Y positions: 70, 155, 240
+var heart = new Heart (101 * Math.floor(Math.random() * 4) + 0, 70 +
+    (85 * Math.floor(Math.random() * 3) + 0));
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
