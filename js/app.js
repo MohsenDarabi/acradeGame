@@ -55,6 +55,31 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
+// Check for collision. Borrowed from
+// https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+Enemy.prototype.checkCollision = function() {
+    "use strict";
+    // Set hitboxes for collision detection
+    var playerBox = {x: player.x, y: player.y, width: 50, height: 40};
+    var enemyBox = {x: this.x, y: this.y, width: 60, height: 70};
+    // Check for collisions, if playerBox intersects enemyBox, we have one
+    if (playerBox.x < enemyBox.x + enemyBox.width &&
+        playerBox.x + playerBox.width > enemyBox.x &&
+        playerBox.y < enemyBox.y + enemyBox.height &&
+        playerBox.height + playerBox.y > enemyBox.y) {
+        // Collision detected, call collisionDetected function
+        this.collisionDetected();
+    }
+};
+
+// Collision detected, decrement playerLives and reset the player
+Enemy.prototype.collisionDetected = function() {
+    "use strict";
+    player.playerLives -= 1;
+    player.characterReset();
+};
+
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
