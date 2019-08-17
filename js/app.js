@@ -32,6 +32,13 @@ Enemy.prototype.update = function(dt) {
     this.checkCollision();
 };
 
+// Random speed generator
+Enemy.prototype.randomSpeed = function (){
+    "use strict";
+    // Speed is a random number from 1-10 times speedMultiplier
+    this.speed = speedMultiplier * Math.floor(Math.random() * 10 + 1);
+};
+
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
