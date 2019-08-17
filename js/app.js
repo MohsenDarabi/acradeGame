@@ -84,7 +84,69 @@ Enemy.prototype.collisionDetected = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+// Gems the player should try to pick up
+var Gem = function(x,y) {
+    "use strict";
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Gem_Orange.png';
+    this.gemWaitTime = undefined;
+};
 
+// Update gem, call checkCollision
+Gem.prototype.update = function() {
+    "use strict";
+    this.checkCollision();
+};
+
+// Draw the gem to the screen
+Gem.prototype.render = function() {
+    "use strict";
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+//Check for collision
+Gem.prototype.checkCollision = function() {
+    "use strict";
+    // Set hitboxes for collision detection
+    var playerBox = {x: player.x, y: player.y, width: 50, height: 40};
+    var gemBox = {x: this.x, y: this.y, width: 60, height: 70};
+    // Check for collisions, if playerBox intersects gemBox, we have one
+    if (playerBox.x < gemBox.x + gemBox.width &&
+        playerBox.x + playerBox.width > gemBox.x &&
+        playerBox.y < gemBox.y + gemBox.height &&
+        playerBox.height + playerBox.y > gemBox.y) {
+        // Collision detected, call collisionDetected function
+        this.collisionDetected();
+    }
+};
+
+// Gem collision detected, hide the gem off canvas,
+// Increase player score, wait 5 seconds, then reset the gem
+Gem.prototype.collisionDetected = function() {
+    "use strict";
+    this.x = 900;
+    this.y = 900;
+    player.playerScore += 30;
+    this.wait();
+};
+
+// Call setTimeout in a function so we can assign it to a variable
+// Necessary for clearTimeout(gem.gemWaitTime) to work
+Gem.prototype.wait = function() {
+    this.gemWaitTime = setTimeout( function() {
+        gem.gemReset(); // this.gemReset() doesn't work
+    }, 5000);
+};
+
+// Reset the gem to a new location
+Gem.prototype.gemReset = function() {
+    "use strict";
+    // Gems appear at one of the following x positions: 0, 101, 202, 303, 404
+    this.x = (101 * Math.floor(Math.random() * 4) + 0);
+    // Gems appear at one of the following Y positions: 60, 145, 230
+    this.y = (60 + (85 * Math.floor(Math.random() * 3) + 0));
+};
 
 
 // This listens for key presses and sends the keys to your
