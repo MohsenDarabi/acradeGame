@@ -51,9 +51,6 @@ Enemy.prototype.render = function() {
     ctx.fillText("Difficulty: " + speedMultiplier, 260, 70);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 
 // Check for collision. Borrowed from
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -148,7 +145,7 @@ Gem.prototype.gemReset = function() {
     this.y = (60 + (85 * Math.floor(Math.random() * 3) + 0));
 };
 
-/ Hearts the player should try to pick up
+// Hearts the player should try to pick up
 var Heart = function(x,y) {
     "use strict";
     this.x = x;
@@ -209,6 +206,91 @@ Heart.prototype.heartReset = function() {
     this.x = (101 * Math.floor(Math.random() * 4) + 0);
     //Hearts appear at one of the following Y positions: 70, 155, 240
     this.y = (70 + (85 * Math.floor(Math.random() * 3) + 0));
+};
+
+/*----------------------------------------------------------------------------*/
+/*------------------------------Player----------------------------------------*/
+
+// Now write your own player class
+// This class requires an update(), render() and
+// a handleInput() method.
+// Start the player at 200x by 400y
+var Player = function() {
+    "use strict";
+    this.startingX = 200;
+    this.startingY = 400;
+    this.x = this.startingX;
+    this.y = this.startingY;
+    this.sprite = 'images/char-horn-girl.png';
+    this.playerScore = 0;
+    this.playerLives = 3;
+};
+
+// Required method for game
+// Check if playerLives is 0, if so call reset
+Player.prototype.update = function() {
+    "use strict";
+    if (this.playerLives === 0) {
+    // clearTimeout(heart.heartWaitTime);
+    reset();
+    }
+};
+
+// Resets the player position to the start position
+Player.prototype.characterReset = function() {
+    "use strict";
+    this.startingX = 200;
+    this.startingY = 400;
+    this.x = this.startingX;
+    this.y = this.startingY;
+};
+
+// Increase score and increase difficulty when player reaches top of water
+Player.prototype.success = function() {
+    "use strict";
+    this.playerScore += 20;
+    speedMultiplier += 5;
+    this.characterReset();
+};
+
+// Draw the player on the screen, required method for game
+Player.prototype.render = function() {
+    "use strict";
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Move the player according to keys pressed
+Player.prototype.handleInput = function(allowedKeys) {
+    "use strict";
+    switch (allowedKeys) {
+        case "left":
+            //check for wall, otherwise move left
+            if (this.x > 0) {
+                this.x -= 101;
+            }
+            break;
+        case "right":
+            //check for wall, otherwise move right
+            if (this.x < 402) {
+                this.x += 101;
+            }
+            break;
+        case "up":
+            //check if player reached top of water, if so call success function,
+            // otherwise move up
+            if (this.y < 0) {
+                this.success();
+            } else {
+                this.y -= 83;
+            }
+            break;
+        case "down":
+            //check for bottom, otherwise move down
+            if (this.y < 400) {
+                this.y += 83;
+            }
+            break;
+    }
 };
 
 
