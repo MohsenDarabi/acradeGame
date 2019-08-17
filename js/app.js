@@ -17,9 +17,19 @@ var Enemy = function(x,y,speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    "use strict";
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x + this.speed * dt;
+    // Reset the enemy with a new speed after it goes off screen
+    this.offScreenX = 505;
+    this.startingX = -100;
+    if (this.x >= this.offScreenX) {
+        this.x = this.startingX;
+        this.randomSpeed();
+    }
+    this.checkCollision();
 };
 
 // Draw the enemy on the screen, required method for game
